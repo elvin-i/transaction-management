@@ -229,7 +229,7 @@ export default {
                 this.handleClose()
                 this.$emit('refresh')
               } else {
-                message.error(res.head.msg)
+                message.error(res.info)
               }
             }).catch((err) => {
               console.log(err)
@@ -246,7 +246,7 @@ export default {
                 this.handleClose()
                 this.$emit('refresh')
               } else {
-                message.error(res.head.msg)
+                message.error(res.info)
               }
             }).catch((err) => {
               console.log(err)
