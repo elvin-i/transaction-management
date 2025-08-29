@@ -28,12 +28,12 @@ public class GlobalExceptionHandler {
         if (ServiceExceptionCodeEnums.ILLEGAL_ARGUMENT_EXCEPTION.getCode().equals(serviceException.getCode())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Result._400(serviceException.getInfo()));
         }
-        return ResponseEntity.status(HttpStatus.OK).body(Result._200(serviceException.getInfo()));
+        return ResponseEntity.status(HttpStatus.OK).body(Result._500(serviceException.getInfo()));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Result> handleServiceException(Exception exception) {
-        return ResponseEntity.status(HttpStatus.OK).body(Result._200("服务繁忙请稍后再试!"));
+        return ResponseEntity.status(HttpStatus.OK).body(Result._500("服务繁忙请稍后再试!"));
     }
 
 }

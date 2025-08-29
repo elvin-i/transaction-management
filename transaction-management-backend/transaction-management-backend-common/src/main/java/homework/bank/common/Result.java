@@ -43,9 +43,9 @@ public class Result<T> {
         return result;
     }
 
-    public static Result<Void> _200(String info) {
+    public static Result<Void> _500(String info) {
         Result<Void> result = new Result<>();
-        result.code = 200;
+        result.code = 500;
         result.info = info;
         return result;
     }
