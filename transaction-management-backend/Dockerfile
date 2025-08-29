@@ -1,8 +1,6 @@
-# syntax=docker/dockerfile:1.4
 FROM local/maven:3.9.3-jdk17 AS build
 WORKDIR /app
 COPY . /app
-# 如果仓库自带 settings.xml，COPY 到 /root/.m2/settings.xml
 RUN mkdir -p /root/.m2 && cp /app/.mvn/settings.xml /root/.m2/settings.xml
 RUN --mount=type=cache,target=/root/.m2 \
     mvn clean package -DskipTests
