@@ -2,7 +2,7 @@
 FROM local/maven:3.9.3-jdk17 AS build
 WORKDIR /app
 COPY . /app
-RUN --mount=type=cache,target=/root/.m2 mvn clean package -DskipTests
+RUN --mount=type=cache,target=/root/.m2 mvn clean package -s /app/.mvn/settings.xml -DskipTests
 
 # 运行阶段
 FROM openjdk:17-jdk-bullseye
