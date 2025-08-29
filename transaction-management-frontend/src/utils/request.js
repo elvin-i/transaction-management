@@ -45,7 +45,7 @@ function getCookie (cname) {
 request.interceptors.request.use(config => {
   config.headers[process.env.VUE_APP_AUTHORIZATION_HEADER_KEY] = Math.random()
   let user =  {
-    username:'buukle',
+    username:'ADMIN',
     userId:'bk_0000000000000000',
     mainTenant:'1',
     subTenantIds:'1,9'

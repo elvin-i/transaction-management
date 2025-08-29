@@ -53,8 +53,8 @@ const user = {
     // 获取用户信息
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
-        commit('SET_NAME', { name: 'buukle(如有使用问题请联系zhanglei)' })
-        commit('SET_INFO', { name: 'buukle' })
+        commit('SET_NAME', { name: 'ADMIN(如有使用问题请联系zhanglei)' })
+        commit('SET_INFO', { name: 'ADMIN' })
         resolve()
         // getInfo().then(response => {
         //   const result = response.result

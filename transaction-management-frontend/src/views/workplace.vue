@@ -9,7 +9,7 @@
           <div class="content-title">
             <span class="welcome-text">{{ welcome }}</span>
           </div>
-          <div>{{ user.name }} | 布壳儿 - buukle</div>
+          <div>{{ user.name }} | admin</div>
         </div>
       </div>
     </template>
