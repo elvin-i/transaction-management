@@ -30,6 +30,7 @@ div .line-border{
 
           <!-- 业务请求流水号  -->
           <a-form-model-item
+            v-if="isAdd"
             label="业务请求流水号"
             prop="requestNo"
             :label-col="formItemLayout.labelCol"
@@ -195,9 +196,11 @@ export default {
   },
   methods: {
     getTitle (initvalue) {
-      if (initvalue) {
+      if (initvalue.id) {
+        this.isAdd = false
         return <span> 编辑 </span>
       } else {
+        this.isAdd = true
         return <span> 新建 </span>
       }
     },
@@ -214,22 +217,42 @@ export default {
         if (bool) {
           // 深拷贝,以避开提交时改变源数据
           var data = JSON.parse(JSON.stringify(this.form))
-          request({
-            url: '/api/web/1.0/order',
-            method: 'post',
-            dataType: 'json',
-            data: data
-          }).then(res => {
-            if (res.code === 200) {
-              message.success('成功!')
-              this.handleClose()
-              this.$emit('refresh')
-            } else {
-              message.error(res.head.msg)
-            }
-          }).catch((err) => {
-            console.log(err)
-          })
+          if (this.isAdd) {
+            request({
+              url: '/api/web/1.0/order',
+              method: 'post',
+              dataType: 'json',
+              data: data
+            }).then(res => {
+              if (res.code === 200) {
+                message.success('成功!')
+                this.handleClose()
+                this.$emit('refresh')
+              } else {
+                message.error(res.head.msg)
+              }
+            }).catch((err) => {
+              console.log(err)
+            })
+          }else{
+            request({
+              url: '/api/web/1.0/order/' + data.id,
+              method: 'put',
+              dataType: 'json',
+              data: data
+            }).then(res => {
+              if (res.code === 200) {
+                message.success('成功!')
+                this.handleClose()
+                this.$emit('refresh')
+              } else {
+                message.error(res.head.msg)
+              }
+            }).catch((err) => {
+              console.log(err)
+            })
+          }
+
         }
       })
     }
@@ -238,6 +261,7 @@ export default {
     return {
       fileList: [],
       visible: false,
+      isAdd: false,
       formLayout: 'horizontal',
       formItemLayout,
       datasourcesList: [],

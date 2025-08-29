@@ -71,43 +71,43 @@ public class OrderServiceImpl implements OrderService {
         lambdaUpdateWrapper.eq(TransactionOrder::getId,id);
 
         if (StringUtils.isNotBlank(updateOrderDTO.getBusinessType())) {
-            lambdaUpdateWrapper.eq(TransactionOrder::getBusinessType, updateOrderDTO.getBusinessType());
+            lambdaUpdateWrapper.set(TransactionOrder::getBusinessType, updateOrderDTO.getBusinessType());
         }
 
         if (StringUtils.isNotBlank(updateOrderDTO.getPayerAccountNo())) {
-            lambdaUpdateWrapper.eq(TransactionOrder::getPayerAccountNo, updateOrderDTO.getPayerAccountNo());
+            lambdaUpdateWrapper.set(TransactionOrder::getPayerAccountNo, updateOrderDTO.getPayerAccountNo());
         }
 
         if (StringUtils.isNotBlank(updateOrderDTO.getPayerAccountName())) {
-            lambdaUpdateWrapper.eq(TransactionOrder::getPayerAccountName, updateOrderDTO.getPayerAccountName());
+            lambdaUpdateWrapper.set(TransactionOrder::getPayerAccountName, updateOrderDTO.getPayerAccountName());
         }
 
         if (StringUtils.isNotBlank(updateOrderDTO.getPayerOrgCode())) {
-            lambdaUpdateWrapper.eq(TransactionOrder::getPayerOrgCode, updateOrderDTO.getPayerOrgCode());
+            lambdaUpdateWrapper.set(TransactionOrder::getPayerOrgCode, updateOrderDTO.getPayerOrgCode());
         }
 
         if (StringUtils.isNotBlank(updateOrderDTO.getPayeeAccountNo())) {
-            lambdaUpdateWrapper.eq(TransactionOrder::getPayeeAccountNo, updateOrderDTO.getPayeeAccountNo());
+            lambdaUpdateWrapper.set(TransactionOrder::getPayeeAccountNo, updateOrderDTO.getPayeeAccountNo());
         }
 
         if (StringUtils.isNotBlank(updateOrderDTO.getPayeeAccountName())) {
-            lambdaUpdateWrapper.eq(TransactionOrder::getPayeeAccountName, updateOrderDTO.getPayeeAccountName());
+            lambdaUpdateWrapper.set(TransactionOrder::getPayeeAccountName, updateOrderDTO.getPayeeAccountName());
         }
 
         if (StringUtils.isNotBlank(updateOrderDTO.getPayeeOrgCode())) {
-            lambdaUpdateWrapper.eq(TransactionOrder::getPayeeOrgCode, updateOrderDTO.getPayeeOrgCode());
+            lambdaUpdateWrapper.set(TransactionOrder::getPayeeOrgCode, updateOrderDTO.getPayeeOrgCode());
         }
 
         if (updateOrderDTO.getAmount() != null) {
-            lambdaUpdateWrapper.eq(TransactionOrder::getAmount, updateOrderDTO.getAmount());
+            lambdaUpdateWrapper.set(TransactionOrder::getAmount, updateOrderDTO.getAmount());
         }
 
         if (StringUtils.isNotBlank(updateOrderDTO.getRemark())) {
-            lambdaUpdateWrapper.eq(TransactionOrder::getRemark, updateOrderDTO.getRemark());
+            lambdaUpdateWrapper.set(TransactionOrder::getRemark, updateOrderDTO.getRemark());
         }
 
         if (StringUtils.isNotBlank(updateOrderDTO.getPostscript())) {
-            lambdaUpdateWrapper.eq(TransactionOrder::getPostscript, updateOrderDTO.getPostscript());
+            lambdaUpdateWrapper.set(TransactionOrder::getPostscript, updateOrderDTO.getPostscript());
         }
 
         // 2. 执行更新

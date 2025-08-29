@@ -30,7 +30,7 @@ cd transaction-management-frontend
 npm install
 npm run serve
 ```
-浏览器访问 127.0.0.1:8000 即可访问页面
+浏览器访问 127.0.0.1:8000/#/transaction/list 即可访问页面
 
 #### 后端 : transaction-management/transaction-management-backend
 

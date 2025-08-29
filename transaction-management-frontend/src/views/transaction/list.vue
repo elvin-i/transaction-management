@@ -113,16 +113,16 @@ export default {
         cancelText: '取消',
         onOk () {
           request({
-            url: '/archetypes/deleteById',
-            method: 'post',
+            url: '/api/web/1.0/order/' + id,
+            method: 'delete',
             dataType: 'json',
             data: commonRequest
           }).then(res => {
-            if (res.head.status === 'S') {
+            if (res.code === 200) {
               message.success('成功!')
               obj.refresh()
             } else {
-              message.error(res.head.msg)
+              message.error(res.info)
             }
           })
         }
@@ -211,10 +211,6 @@ export default {
             totalPage:'',
             data:[]
           }
-          //  protected List<T> records;
-          // protected long total;
-          // protected long size;
-          // protected long current;
           wrapperR.pageNo = r.current
           wrapperR.pageSize = r.size
           wrapperR.totalCount = r.total
