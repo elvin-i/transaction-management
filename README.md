@@ -64,27 +64,50 @@ transaction-management/transaction-management-backend/transaction-management-bac
 
 ### 容器部署(docker)
 
-1. 构建Docker镜像
+登录虚拟机服务器,执行一键部署脚本
 
-    登录服务器
+```sh
+./deploy.sh
+```
 
-    ```sh
-    git clone https://github.com/elvin-i/transaction-management
-    ```
+一键容器化部署脚本,从拉取git代码,到构建镜像,再到替换docker容器,时间紧迫使用简易脚本实现,后续可基于此迁移到devops的pipline
 
-    ```sh
-    cd transaction-management-backend
-    ```
-    
-    ```sh
-    DOCKER_BUILDKIT=1 docker build -t transaction-backend .
-    ```
+deploy.sh:
 
-2. 运行Docker容器：
+```sh
+#!/bin/bash
 
-    ```sh
-    docker run  -d -p 80:8080 transaction-backend
-     ```
+# 配置参数
+REPO_URL="https://github.com/elvin-i/transaction-management"
+PROJECT_DIR="transaction-management/transaction-management-backend"
+IMAGE_NAME="transaction-backend"
+IMAGE_TAG="1.0"
+HOST_PORT=80
+CONTAINER_PORT=8080
+
+echo "Removing old project directory..."
+rm -rf transaction-management/
+
+echo "Cloning repository..."
+git clone $REPO_URL
+
+echo "Building Docker image..."
+cd $PROJECT_DIR || exit 1
+DOCKER_BUILDKIT=1 docker build -t $IMAGE_NAME:$IMAGE_TAG .
+
+# 查找占用 HOST_PORT 的容器
+OLD_CONTAINER=$(docker ps -q --filter "publish=$HOST_PORT")
+if [ -n "$OLD_CONTAINER" ]; then
+  echo "Stopping container using port $HOST_PORT..."
+  docker stop $OLD_CONTAINER
+  docker rm $OLD_CONTAINER
+fi
+
+echo "Starting new container..."
+docker run -d -p $HOST_PORT:$CONTAINER_PORT $IMAGE_NAME:$IMAGE_TAG
+
+echo "Deployment completed successfully."
+```
    
 ## 设计方案
 
