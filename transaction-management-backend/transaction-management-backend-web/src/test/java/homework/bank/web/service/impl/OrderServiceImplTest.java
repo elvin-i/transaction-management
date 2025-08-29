@@ -155,7 +155,7 @@ public class OrderServiceImplTest {
         when(transactionOrderRepository.page(any(Page.class), any())).thenReturn(page);
 
         // Act
-        Page<OrderVO> result = orderService.getPage(pageNo, pageSize, null, null);
+        Page<OrderVO> result = orderService.getPage(pageNo, pageSize, null, null, null);
 
         // Assert
         assertNotNull(result);

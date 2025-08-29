@@ -129,8 +129,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Cacheable(value = "orderCache", key = "(#startCreateTime != null ? #startCreateTime : '') + (#endCreateTime != null ? #endCreateTime : '') + '_' + #pageNo + '_' + #pageSize", unless = "#result == null")
-    public Page<OrderVO> getPage(int pageNo, int pageSize, String startCreateTime, String endCreateTime) {
+    @Cacheable(value = "orderCache", key = "(#startCreateTime != null ? #startCreateTime : '') + (#endCreateTime != null ? #endCreateTime : '') + (#requestNo != null ? #requestNo : '') + '_' + #pageNo + '_' + #pageSize", unless = "#result == null")
+    public Page<OrderVO> getPage(int pageNo, int pageSize, String startCreateTime, String endCreateTime, String requestNo) {
 
         // 1. 构造分页对象
         Page<TransactionOrder> page = new Page<>(pageNo, pageSize);
@@ -143,6 +143,9 @@ public class OrderServiceImpl implements OrderService {
         }
         if (StringUtils.isNotBlank(endCreateTime)) {
             queryWrapper.le(TransactionOrder::getGmtCreated, endCreateTime);
+        }
+        if (StringUtils.isNotBlank(requestNo)) {
+            queryWrapper.eq(TransactionOrder::getRequestNo, requestNo);
         }
         queryWrapper.orderByDesc(TransactionOrder::getId);
 

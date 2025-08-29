@@ -70,9 +70,10 @@ public class OrderController {
     public Result<Page<OrderVO>> getPage( @RequestParam(value = "pageNo", required = false, defaultValue = "0") int pageNo,
                                           @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                           @RequestParam(value = "startCreateTime", required = false) String startCreateTime,
-                                          @RequestParam(value = "endCreateTime", required = false) String endCreateTime
-    ) {
-        return new Result.Builder().success(orderService.getPage(pageNo,pageSize,startCreateTime,endCreateTime));
+                                          @RequestParam(value = "endCreateTime", required = false) String endCreateTime,
+                                          @RequestParam(value = "requestNo", required = false) String requestNo
+                                          ) {
+        return new Result.Builder().success(orderService.getPage(pageNo,pageSize,startCreateTime,endCreateTime,requestNo));
     }
 
 }

@@ -15,5 +15,5 @@ public interface OrderService {
 
     OrderVO get(Long id);
 
-    Page<OrderVO> getPage(int pageNo, int pageSize, String startCreateTime, String endCreateTime);
+    Page<OrderVO> getPage(int pageNo, int pageSize, String startCreateTime, String endCreateTime, String requestNo);
 }
