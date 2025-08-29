@@ -14,9 +14,12 @@ import homework.bank.service.exception.ServiceExceptionCodeEnums;
 import homework.bank.service.impl.converter.OrderConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +32,8 @@ public class OrderServiceImpl implements OrderService {
     TransactionOrderRepository transactionOrderRepository;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "orderCache", allEntries = true)
     public OrderVO create(CreateOrderDTO createOrderDTO) {
         // 1. 转换实体
         TransactionOrder transactionOrder = OrderConverter.fromCreateOrderDTO2Entity(createOrderDTO);
@@ -38,6 +43,7 @@ public class OrderServiceImpl implements OrderService {
         }
         // 3. 幂等处理
         catch (DuplicateKeyException e) {
+            log.info("命中幂等逻辑,直接返回库里数据 requestNo:{}",createOrderDTO.getRequestNo());
             return this.getByRequestNo(transactionOrder.getRequestNo());
         }
         // 4. 响应
@@ -45,7 +51,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @CacheEvict(value = "orderCache", allEntries = true)
     public void delete(Long id) {
+        log.info("查询详情-id:{}",id);
         boolean b = transactionOrderRepository.removeById(id);
         if (!b) {
             log.error("delete - {},id : {}", ServiceExceptionCodeEnums.DELETE_ORDER_WRONG_ORDER_NOT_EXIST.getInfo(), id);
@@ -54,6 +62,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "orderCache", allEntries = true)
     public OrderVO update(Long id, UpdateOrderDTO updateOrderDTO) {
 
         // 1. 构造更新条件
@@ -113,11 +123,13 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
+    @Cacheable(value = "orderCache", key = "'transactionOrder:' + #id")
     public OrderVO get(Long id) {
         return this.getById(id);
     }
 
     @Override
+    @Cacheable(value = "orderCache", key = "(#startCreateTime != null ? #startCreateTime : '') + (#endCreateTime != null ? #endCreateTime : '') + '_' + #pageNo + '_' + #pageSize", unless = "#result == null")
     public Page<OrderVO> getPage(int pageNo, int pageSize, String startCreateTime, String endCreateTime) {
 
         // 1. 构造分页对象

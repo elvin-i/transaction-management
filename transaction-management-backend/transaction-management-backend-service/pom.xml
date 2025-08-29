@@ -31,6 +31,11 @@
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>3.1.8</version>
+        </dependency>
+        <dependency>
             <groupId>homework.bank</groupId>
             <artifactId>transaction-management-backend-dao</artifactId>
             <version>1.0-SNAPSHOT</version>

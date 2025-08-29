@@ -129,6 +129,19 @@ public class OrderServiceImplTest {
     }
 
     /**
+     * 查询交易订单 - 详情缓存
+     */
+    @Test
+    public void testGetOrderSuccessCache() throws Exception {
+
+        // Act & Assert
+        // 相同id查询2次看是否走缓存
+        orderService.get(1L);
+        orderService.get(1L);
+        verify(transactionOrderRepository, times(1)).getById(1L);
+    }
+
+    /**
      * 查询交易订单 - 分页
      */
     @Test
