@@ -6,6 +6,8 @@ import homework.bank.dtvo.dto.order.CreateOrderDTO;
 import homework.bank.dtvo.dto.order.UpdateOrderDTO;
 import homework.bank.dtvo.vo.order.OrderVO;
 import homework.bank.service.OrderService;
+import homework.bank.service.exception.ServiceException;
+import homework.bank.service.exception.ServiceExceptionCodeEnums;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,6 +43,9 @@ public class OrderControllerTest {
     @MockBean
     private OrderService orderService;
 
+    /**
+     * 创建交易订单
+     */
     @Test
     public void testCreateOrder() throws Exception {
 
@@ -78,6 +83,9 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.data.amount").value(10));
     }
 
+    /**
+     * 删除交易订单
+     */
     @Test
     public void testDeleteOrder() throws Exception {
         // Arrange
@@ -89,6 +97,9 @@ public class OrderControllerTest {
         verify(orderService, times(1)).delete(1L);
     }
 
+    /**
+     * 更新交易订单
+     */
     @Test
     public void testUpdateOrder() throws Exception {
         // Arrange
@@ -108,6 +119,9 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.data.remark").value("更新备注"));
     }
 
+    /**
+     * 查询交易订单 - 详情
+     */
     @Test
     public void testGetOrder() throws Exception {
         // Arrange
@@ -126,6 +140,9 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.data.amount").value(10));
     }
 
+    /**
+     * 查询交易订单 - 详情
+     */
     @Test
     public void testGetPageOrders() throws Exception {
         // Arrange
@@ -150,4 +167,64 @@ public class OrderControllerTest {
                 .andExpect(jsonPath("$.data.records[0].businessType").value("type"))
                 .andExpect(jsonPath("$.data.records[0].amount").value(10));
     }
+
+    //===============================================异常用例===========================================
+
+    /**
+     * 创建交易订单 - 字段值非法
+     */
+    @Test
+    public void testCreateOrderValidationFail() throws Exception {
+        // Arrange
+        CreateOrderDTO invalidDTO = new CreateOrderDTO();
+        // 无效金额
+        invalidDTO.setAmount(BigDecimal.ZERO);
+
+        // Act & Assert
+        mockMvc.perform(post("/api/web/1.0/order").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(invalidDTO)))
+                .andExpect(status().isBadRequest());
+    }
+
+    /**
+     * 删除交易订单 - 不存在
+     */
+    @Test
+    public void testDeleteOrderNotFound() throws Exception {
+        // Arrange
+        ServiceException serviceException = new ServiceException("订单不存在");
+        serviceException.setCode(ServiceExceptionCodeEnums.ILLEGAL_ARGUMENT_EXCEPTION.getCode());
+        doThrow(serviceException).when(orderService).delete(999L);
+
+        // Act & Assert
+        mockMvc.perform(delete("/api/web/1.0/order/{id}", 999L)).andExpect(status().isBadRequest()).andExpect(jsonPath("$.info").value("订单不存在"));
+    }
+
+    /**
+     * 更新交易订单 - 传入非法参数
+     */
+    @Test
+    public void testUpdateOrderValidationFail() throws Exception {
+        // Arrange
+        UpdateOrderDTO dto = new UpdateOrderDTO();
+        dto.setAmount(BigDecimal.ZERO);
+
+        // Act & Assert
+        mockMvc.perform(put("/api/web/1.0/order/{id}", 1L).contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
+    }
+
+    /**
+     * 查询交易订单 - 不存在
+     */
+    @Test
+    public void testGetOrderNotFound() throws Exception {
+        // Arrange
+        ServiceException serviceException = new ServiceException("订单不存在");
+        serviceException.setCode(ServiceExceptionCodeEnums.ILLEGAL_ARGUMENT_EXCEPTION.getCode());
+        when(orderService.get(999L)).thenThrow(serviceException);
+
+        // Act & Assert
+        mockMvc.perform(get("/api/web/1.0/order/{id}", 999L)) .andExpect(status().isBadRequest()).andExpect(jsonPath("$.info").value("订单不存在"));
+    }
+
 }
