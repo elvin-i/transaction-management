@@ -6,8 +6,9 @@
 
 该项目目标是为银行交易提供基本的维护能力和扩展能力
 
-### 线上地址
+### 线上预览
 
+http://homework.buukle.top/index.html#/transaction/list
 
 ### 本地预览
 
@@ -57,17 +58,20 @@ transaction-management/transaction-management-backend/transaction-management-bac
 主要提供资源消耗型任务所需服务(与其他服务隔离,避免影响web管理用户或交易主链路,任务中间件可插拔式在此模块集成)
 
 (3) rpc服务
+
 transaction-management/transaction-management-backend/transaction-management-backend-rpc模块下/src/main中主类启动
 主要提供组织内部上游接口调用服务,可提供restful接口或sdk二方包(与其他服务隔离,考虑到后续发展与上游的业务进行服务端交互,提供rpc接口或其他形式的客户端)
 
-### 容器部署
+### 容器部署(docker)
 
-docker容器部署
+1. 构建Docker镜像
 
-1. 构建Docker镜像：
+    登录服务器
 
-    登录服务器,git clone https://github.com/elvin-i/transaction-management
-    
+    ```sh
+    git clone https://github.com/elvin-i/transaction-management
+    ```
+
     ```sh
     cd transaction-management-backend
     ```
@@ -130,10 +134,7 @@ CREATE TABLE TRANSACTION_ORDER (
 [schema.sql](transaction-management-backend/transaction-management-backend-dao/src/main/resources/schema.sql)
 #### 接口设计
 
-
-
 #### 交易管理API接口说明
-
 
 **0. 通用规范**
 
@@ -291,7 +292,7 @@ CREATE TABLE TRANSACTION_ORDER (
   ``` sql
        CONSTRAINT UK_REQUEST_NO UNIQUE (REQUEST_NO)
   ```
-请求流水号使用唯一索引,在重读请求时,幂等返回相同的数据,防止同一请求流水号重复下单造成资金安全隐患
+请求流水号使用唯一索引,在重复请求时,幂等返回相同的数据,防止同一请求流水号重复下单造成资金安全隐患
 
 ### 性能考量
 #### 本地缓存
@@ -309,11 +310,18 @@ CREATE TABLE TRANSACTION_ORDER (
 ## 功能展示
 
 * 新增交易
+  ![add.png](doc/add.png)
 * 删除交易
+  ![delete.png](doc/delete.png)
 * 更新交易
+  ![update.png](doc/update.png)
 * 查询交易 - 分页
+  第一页 
+  ![page.png](doc/page1.png)
+  第二页
+  ![page.png](doc/page2.png)
 * 查询交易 - 详情
-
+  ![info.png](doc/info.png)
 ## 现状及规划
 
 ### 现状
