@@ -154,7 +154,7 @@ public class OrderControllerTest {
         Page<OrderVO> page = new Page<>();
         page.setRecords(Collections.singletonList(vo));
 
-        when(orderService.getPage(anyInt(), anyInt(), anyString(), anyString(), requestNo)).thenReturn(page);
+        when(orderService.getPage(anyInt(), anyInt(), anyString(), anyString(), anyString())).thenReturn(page);
 
         // Act & Assert
         mockMvc.perform(get("/api/web/1.0/order")
