@@ -311,10 +311,16 @@ CREATE TABLE TRANSACTION_ORDER (
 
 * 新增交易
   ![add.png](doc/add.png)
+  新增后
+  ![add-after.png](doc/add-after.png)
 * 删除交易
   ![delete.png](doc/delete.png)
+  删除后
+  ![delete-after.png](doc/delete-after.png)
 * 更新交易
   ![update.png](doc/update.png)
+  更新后
+  ![update-after.png](doc/update-after.png)
 * 查询交易 - 分页
   第一页 
   ![page.png](doc/page1.png)
