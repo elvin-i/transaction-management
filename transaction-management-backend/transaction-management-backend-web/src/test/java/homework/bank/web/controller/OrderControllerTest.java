@@ -105,6 +105,7 @@ public class OrderControllerTest {
         // Arrange
         UpdateOrderDTO updateOrderDTO = new UpdateOrderDTO();
         updateOrderDTO.setRemark("更新备注");
+        updateOrderDTO.setAmount(new BigDecimal("0.01"));
 
         OrderVO vo = new OrderVO();
         vo.setId(1L);
@@ -154,7 +155,7 @@ public class OrderControllerTest {
         Page<OrderVO> page = new Page<>();
         page.setRecords(Collections.singletonList(vo));
 
-        when(orderService.getPage(anyInt(), anyInt(), anyString(), anyString(), anyString())).thenReturn(page);
+        when(orderService.getPage(anyInt(), anyInt(), anyString(), anyString(), isNull())).thenReturn(page);
 
         // Act & Assert
         mockMvc.perform(get("/api/web/1.0/order")

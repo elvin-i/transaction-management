@@ -66,52 +66,48 @@ public class OrderServiceImpl implements OrderService {
     @CacheEvict(value = "orderCache", allEntries = true)
     public OrderVO update(Long id, UpdateOrderDTO updateOrderDTO) {
 
-        // 1. 构造更新条件
-        LambdaUpdateWrapper<TransactionOrder> lambdaUpdateWrapper = new LambdaUpdateWrapper<>();
-        lambdaUpdateWrapper.eq(TransactionOrder::getId,id);
+        // 1. 查询原始订单
+        TransactionOrder existing = transactionOrderRepository.getById(id);
+        if (existing == null) {
+            log.error("update - {}, id : {}",
+                    ServiceExceptionCodeEnums.UPDATE_ORDER_WRONG_ORDER_NOT_EXIST_OR_NOT_CHANGE.getInfo(), id);
+            throw new ServiceException(ServiceExceptionCodeEnums.UPDATE_ORDER_WRONG_ORDER_NOT_EXIST_OR_NOT_CHANGE);
+        }
 
+        // 2. 只更新非空字段
         if (StringUtils.isNotBlank(updateOrderDTO.getBusinessType())) {
-            lambdaUpdateWrapper.set(TransactionOrder::getBusinessType, updateOrderDTO.getBusinessType());
+            existing.setBusinessType(updateOrderDTO.getBusinessType());
         }
-
         if (StringUtils.isNotBlank(updateOrderDTO.getPayerAccountNo())) {
-            lambdaUpdateWrapper.set(TransactionOrder::getPayerAccountNo, updateOrderDTO.getPayerAccountNo());
+            existing.setPayerAccountNo(updateOrderDTO.getPayerAccountNo());
         }
-
         if (StringUtils.isNotBlank(updateOrderDTO.getPayerAccountName())) {
-            lambdaUpdateWrapper.set(TransactionOrder::getPayerAccountName, updateOrderDTO.getPayerAccountName());
+            existing.setPayerAccountName(updateOrderDTO.getPayerAccountName());
         }
-
         if (StringUtils.isNotBlank(updateOrderDTO.getPayerOrgCode())) {
-            lambdaUpdateWrapper.set(TransactionOrder::getPayerOrgCode, updateOrderDTO.getPayerOrgCode());
+            existing.setPayerOrgCode(updateOrderDTO.getPayerOrgCode());
         }
-
         if (StringUtils.isNotBlank(updateOrderDTO.getPayeeAccountNo())) {
-            lambdaUpdateWrapper.set(TransactionOrder::getPayeeAccountNo, updateOrderDTO.getPayeeAccountNo());
+            existing.setPayeeAccountNo(updateOrderDTO.getPayeeAccountNo());
         }
-
         if (StringUtils.isNotBlank(updateOrderDTO.getPayeeAccountName())) {
-            lambdaUpdateWrapper.set(TransactionOrder::getPayeeAccountName, updateOrderDTO.getPayeeAccountName());
+            existing.setPayeeAccountName(updateOrderDTO.getPayeeAccountName());
         }
-
         if (StringUtils.isNotBlank(updateOrderDTO.getPayeeOrgCode())) {
-            lambdaUpdateWrapper.set(TransactionOrder::getPayeeOrgCode, updateOrderDTO.getPayeeOrgCode());
+            existing.setPayeeOrgCode(updateOrderDTO.getPayeeOrgCode());
         }
-
         if (updateOrderDTO.getAmount() != null) {
-            lambdaUpdateWrapper.set(TransactionOrder::getAmount, updateOrderDTO.getAmount());
+            existing.setAmount(updateOrderDTO.getAmount());
         }
-
         if (StringUtils.isNotBlank(updateOrderDTO.getRemark())) {
-            lambdaUpdateWrapper.set(TransactionOrder::getRemark, updateOrderDTO.getRemark());
+            existing.setRemark(updateOrderDTO.getRemark());
         }
-
         if (StringUtils.isNotBlank(updateOrderDTO.getPostscript())) {
-            lambdaUpdateWrapper.set(TransactionOrder::getPostscript, updateOrderDTO.getPostscript());
+            existing.setPostscript(updateOrderDTO.getPostscript());
         }
 
-        // 2. 执行更新
-        boolean update = transactionOrderRepository.update(lambdaUpdateWrapper);
+        // 3. 执行更新
+        boolean update = transactionOrderRepository.updateById(existing);
 
         // 3. 响应
         if (update) {

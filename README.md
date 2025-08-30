@@ -167,7 +167,7 @@ CREATE TABLE TRANSACTION_ORDER (
 
 **1. 创建交易订单接口**
 
-- **请求方式**：GET
+- **请求方式**：POST
 - **请求路径**：`/api/web/1.0/order`
 - **请求参数**：
   - requestNo（必填）：业务请求流水号，用于幂等。
@@ -326,9 +326,22 @@ CREATE TABLE TRANSACTION_ORDER (
 
 ### 单元测试
 
-### 集成测试
+使用junit + Mockito 做单元测试
+* controller层覆盖率达到100%
+![controller-unit-test.png](doc/controller-unit-test.png)
+* service层方法覆盖率100% , 代码覆盖率 >80% , 分支覆盖率 > 70%
+![service-unit-test.png](doc/service-unit-test.png)
 
+### 集成测试
+使用junit +MockMvc 做集成测试
+* 核心case覆盖率100%
+![aggregation-test.png](doc/aggregation-test.png)
 ### 性能测试
+使用ApiFox 做压力测试,调选2个场景,1:创建订单场景 2:订单详情查询场景
+
+* 创建订单性能压测
+
+* 查询订单详情压测
 
 ## 功能展示
 
