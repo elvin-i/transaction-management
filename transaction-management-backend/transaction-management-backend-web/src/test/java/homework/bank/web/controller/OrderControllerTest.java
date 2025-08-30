@@ -142,7 +142,7 @@ public class OrderControllerTest {
     }
 
     /**
-     * 查询交易订单 - 详情
+     * 查询交易订单 - 分页
      */
     @Test
     public void testGetPageOrders() throws Exception {
