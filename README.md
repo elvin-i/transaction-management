@@ -200,7 +200,7 @@ CREATE TABLE TRANSACTION_ORDER (
 
 **2. 删除交易订单接口**
 
-- **请求方式**：GET
+- **请求方式**：DELETE
 - **请求路径**：`/api/web/1.0/order/{id}`
 - **请求参数**：
   路径参数
