@@ -2,9 +2,12 @@
 
 # **交易订单管理系统**
 
-## 系统简介
+## 系统介绍
 
-该项目目标是为银行交易提供基本的维护能力和扩展能力
+- 功能 : 本项目是一个演示系统。用户能够通过页面对交易记录进行管理,包括 创建,删除,更新交易记录,分页查询交易列表和查询单条交易详情等。
+- 技术 : 项目前端基于vue-anti-design-pro构建,后端基于java17构建 ,数据库使用h2内存模式。
+- 开发 : 项目有基于restful规范的接口文档,分层单元测试和集成测试,压力测试,用例齐全,便于阅读和开发。
+- 维护 : 项目基于dockerfile进行容器化,提供一键s2i(source-code to image)脚本,便于临时维护和devops云化迁移。
 
 ### 线上预览
 
@@ -13,7 +16,9 @@ http://homework.buukle.top/index.html#/transaction/list
 ### 本地预览
 
 本地启动 : transaction-management/transaction-management-backend/transaction-management-backend-web/src/main/java/homework.bank.web.WebApplication
+
 `` 注 : 本地预览只需启动后端服务,前端资源已经构建并集成到了后端中 ``
+
 访问路径: http://localhost:8080/index.html
 
 ### 本地开发
@@ -338,10 +343,13 @@ CREATE TABLE TRANSACTION_ORDER (
 ![aggregation-test.png](doc/aggregation-test.png)
 ### 性能测试
 
-  - 测试工具 : ApiFox 
-  - 测试场景 : 挑选2个场景 1:创建订单场景 2:订单详情查询场景
-  - 资源额度 : 阿里云ecs 2U4G
-  - 网络环境 : 公网域名 dns 
+  **测试工具 : ApiFox**
+
+  **测试场景 : 挑选2个场景 1:创建订单场景 2:订单详情查询场景**
+
+  **资源额度 : 阿里云ecs 2U4G**
+
+  **网络环境 : 公网域名 dns**
 
 * 创建订单性能压测
 
