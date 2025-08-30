@@ -15,7 +15,9 @@ http://homework.buukle.top/index.html#/transaction/list
 
 技术概述 + 功能展示 视频 :
 
-[show.mp4](doc/show.mp4)
+B站视频地址 : https://www.bilibili.com/video/BV1GnhqzpEC1
+
+github视频地址 : [show.mp4](doc/show.mp4)
 
 ### 本地预览
 
