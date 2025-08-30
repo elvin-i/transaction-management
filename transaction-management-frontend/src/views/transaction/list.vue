@@ -37,8 +37,8 @@
         <span slot="status" slot-scope="text">
           <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
         </span>
-        <span slot="name" slot-scope="text">
-          <ellipsis :length="16" tooltip>{{ text }}</ellipsis>
+        <span slot="tooltip-request-no" slot-scope="text">
+          <ellipsis :length="30" tooltip>{{ text }}</ellipsis>
         </span>
         <span slot="gmtCreated" slot-scope="text">
           <ellipsis :length="64" tooltip>{{ gmtDateFormat(text) }}</ellipsis>
@@ -48,7 +48,6 @@
             <a @click="handleEdit(record.id)">编辑</a>&nbsp;
             <a @click="handleDelete(record.id)">删除</a>&nbsp;
             <a @click="handleInfo(record.id)">详情</a>&nbsp;
-<!--            <a @click="handleBan(record)">停用</a>-->
           </template>
         </span>
       </s-table>
@@ -59,7 +58,7 @@
       />
       <InfoTable
         ref="InfoTable"
-        :initvalue="initvalue"
+        :initvalue="initvalueForInfo"
         @refresh="refresh"
       />
     </a-card>
@@ -118,12 +117,11 @@ export default {
             dataType: 'json',
             data: commonRequest
           }).then(res => {
-            if (res.code === 200) {
-              message.success('成功!')
-              obj.refresh()
-            } else {
-              message.error(res.info)
-            }
+            message.success('成功!')
+            obj.refresh(true)
+          }).catch((err) => {
+            message.error('系统开小差了')
+            console.log(err)
           })
         }
       })
@@ -149,7 +147,7 @@ export default {
         method: 'get',
       }).then(res => {
         if (res.code === 200) {
-          this.initvalue = res.data
+          this.initvalueForInfo = res.data
           this.$refs.InfoTable.show()
         } else {
           message.error(res.info)
@@ -172,8 +170,8 @@ export default {
   data () {
     this.columns = columns
     return {
-      genvalue: {},
       initvalue: {},
+      initvalueForInfo: {},
       // create model
       visible: false,
       confirmLoading: false,
@@ -255,27 +253,28 @@ const columns = [
   {
     title: '请求流水号',
     dataIndex: 'requestNo',
-    width: '10%'
+    width: '20%',
+    scopedSlots: { customRender: 'tooltip-request-no' }
   },
   {
     title: '出款户号',
     dataIndex: 'payerAccountNo',
-    width: '10%'
+    width: '15%'
   },
   {
     title: '出款户名',
     dataIndex: 'payerAccountName',
-    width: '15%'
+    width: '10%'
   },
   {
     title: '收款户号',
     dataIndex: 'payeeAccountNo',
-    width: '10%'
+    width: '15%'
   },
   {
     title: '收款户名',
     dataIndex: 'payeeAccountName',
-    width: '15%'
+    width: '10%'
   },
   {
     title: '交易金额',
@@ -285,7 +284,7 @@ const columns = [
   {
     title: '操作',
     dataIndex: 'action',
-    width: '20%',
+    width: '15%',
     scopedSlots: { customRender: 'action' }
   }
 ]

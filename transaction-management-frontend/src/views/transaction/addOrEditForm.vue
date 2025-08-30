@@ -122,7 +122,7 @@ div .line-border{
             :label-col="formItemLayout.labelCol"
             :wrapper-col="formItemLayout.wrapperCol"
           >
-            <a-input v-model="form.remark" placeholder="备注" />
+            <a-textarea v-model="form.remark" placeholder="备注" />
           </a-form-model-item>
           <!-- 附言  -->
           <a-form-model-item
@@ -131,7 +131,7 @@ div .line-border{
             :label-col="formItemLayout.labelCol"
             :wrapper-col="formItemLayout.wrapperCol"
           >
-            <a-input v-model="form.postscript" placeholder="附言" />
+            <a-textarea v-model="form.postscript" placeholder="附言" />
           </a-form-model-item>
 
       </a-form-model>
@@ -358,6 +358,12 @@ export default {
         ],
         amount: [
           { required: true, message: '请输入' },
+        ],
+        remark: [
+          { max: 200, message: '最多输入200个字符' },
+        ],
+        postscript: [
+          { max: 200, message: '最多输入200个字符' },
         ]
         },
         commonRequest: {
