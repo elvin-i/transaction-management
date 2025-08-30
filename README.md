@@ -26,8 +26,11 @@ http://homework.buukle.top/index.html#/transaction/list
 #### 前端 : transaction-management/transaction-management-frontend
 
 ##### 环境
+
 node : v16.20.2
+
 npm : 8.19.4
+
 ##### 调试步骤
 在控制台进入仓库根目录,执行以下命令:
 ```sh
@@ -40,32 +43,48 @@ npm run serve
 #### 后端 : transaction-management/transaction-management-backend
 
 ##### 环境
+
 jdk17
+
 maven (默认使用.mvn机制,即使用.mvn下 : maven.config中的maven参数, wrapper/maven-wrapper.properties 的maven版本,settings.xml的maven仓库)
 
 ##### 调试步骤
 
 (1) web服务
 
-主要提供管理页面所需的web接口
+提供管理页面所需的web接口
 
 - 启动
 
-transaction-management/transaction-management-backend/transaction-management-backend-web模块下/src/main中主类
+  transaction-management/transaction-management-backend/transaction-management-backend-web模块下/src/main中主类
 
 - 单元测试
 
-transaction-management/transaction-management-backend/transaction-management-backend-web模块下/src/test中测试类
+  transaction-management/transaction-management-backend/transaction-management-backend-web模块下/src/test中测试类
 
 (2) job服务
 
-transaction-management/transaction-management-backend/transaction-management-backend-job模块下/src/main中主类启动
-主要提供资源消耗型任务所需服务(与其他服务隔离,避免影响web管理用户或交易主链路,任务中间件可插拔式在此模块集成)
+提供资源消耗型任务服务
+
+- 启动
+
+  transaction-management/transaction-management-backend/transaction-management-backend-job模块下/src/main中主类
+
+- 目标
+
+  避免因跑批任务资源消耗影响web管理用户或rpc交易,在本模块可插拔式集成任务中间件
 
 (3) rpc服务
 
-transaction-management/transaction-management-backend/transaction-management-backend-rpc模块下/src/main中主类启动
-主要提供组织内部上游接口调用服务,可提供restful接口或sdk二方包(与其他服务隔离,考虑到后续发展与上游的业务进行服务端交互,提供rpc接口或其他形式的客户端)
+提供上游后端服务rpc接口调用服务或sdk
+
+- 启动
+
+  transaction-management/transaction-management-backend/transaction-management-backend-rpc模块下/src/main中主类
+
+- 目标
+
+  提供restful接口或sdk二方包,解耦web管理和rpc交易,为上游业务服务端调用场景提供扩展性支持
 
 ### 容器部署(docker)
 
@@ -75,7 +94,9 @@ transaction-management/transaction-management-backend/transaction-management-bac
 ./deploy.sh
 ```
 
-一键容器化部署脚本,从拉取git代码,到构建镜像,再到替换docker容器,时间紧迫使用简易脚本实现,后续可基于此迁移到devops的pipline
+一键容器化部署脚本 : 拉取git代码 → 后端代码编译打包 → 构建镜像 → docker容器部署
+
+时间原因,前端代码本地打包后通过 web模块的 resources/static 目录进行集成。 
 
 deploy.sh:
 
@@ -158,8 +179,8 @@ CREATE TABLE TRANSACTION_ORDER (
    CONSTRAINT UK_REQUEST_NO UNIQUE (REQUEST_NO)
 );
 ```
-包含了交易订单常规的字段,预留状态字段便于状态机扩展
-[schema.sql](transaction-management-backend/transaction-management-backend-dao/src/main/resources/schema.sql)
+包含了交易订单常规的字段,预留状态字段便于状态机扩展 详见 : [schema.sql](transaction-management-backend/transaction-management-backend-dao/src/main/resources/schema.sql)
+
 #### 接口设计
 
 #### 交易管理API接口说明
@@ -329,6 +350,10 @@ CREATE TABLE TRANSACTION_ORDER (
 
 ## 测试方案
 
+### 用例设计
+
+![test-case.png](doc/test-case.png)
+
 ### 单元测试
 
 使用junit + Mockito 做单元测试
@@ -347,7 +372,7 @@ CREATE TABLE TRANSACTION_ORDER (
 
   **测试场景 : 挑选2个场景 1:创建订单场景 2:订单详情查询场景**
 
-  **资源额度 : 阿里云ecs 2U4G**
+  **资源额度 : 阿里云ECS 2U4G**
 
   **网络环境 : 公网域名 dns**
 
@@ -412,9 +437,14 @@ CREATE TABLE TRANSACTION_ORDER (
 * 查询交易 - 详情
   ![info.png](doc/info.png)
 
-## 现状及规划
+## 规划
 
-### 现状
+如果现实场景基于交易订单业务发展需要,可做如下几点规划
 
-### 规划
-
+- 前端 : 自动化构建,部署
+- 网关建设 : 通过nginx/apisix/kong 等技术分发前后端请求
+- web管理 : 用户,权限建设或集成
+- 任务服务 : 集成xxlJob 等分布式任务调度扩展
+- rpc服务 : 通过@RemoteServe 等机制为上游业务服务端提供rpc接口或sdk
+- 高可用性 : 限流,降级,熔断机制的引入
+- 持续集成 : devops迁移优化,代码扫描,平滑发版机制等引入
