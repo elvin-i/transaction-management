@@ -338,10 +338,10 @@ CREATE TABLE TRANSACTION_ORDER (
 ![aggregation-test.png](doc/aggregation-test.png)
 ### 性能测试
 
-测试工具 : ApiFox 
-测试场景 : 调选2个场景,1:创建订单场景 2:订单详情查询场景
-资源额度 : 阿里云ecs 2U4G
-网络环境 : 公网域名 dns 
+  - 测试工具 : ApiFox 
+  - 测试场景 : 挑选2个场景 1:创建订单场景 2:订单详情查询场景
+  - 资源额度 : 阿里云ecs 2U4G
+  - 网络环境 : 公网域名 dns 
 
 * 创建订单性能压测
 
