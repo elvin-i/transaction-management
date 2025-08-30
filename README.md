@@ -337,11 +337,50 @@ CREATE TABLE TRANSACTION_ORDER (
 * 核心case覆盖率100%
 ![aggregation-test.png](doc/aggregation-test.png)
 ### 性能测试
-使用ApiFox 做压力测试,调选2个场景,1:创建订单场景 2:订单详情查询场景
+
+测试工具 : ApiFox 
+测试场景 : 调选2个场景,1:创建订单场景 2:订单详情查询场景
+资源额度 : 阿里云ecs 2U4G
+网络环境 : 公网域名 dns 
 
 * 创建订单性能压测
 
+  压测报告
+  
+  ![inefficient-save-data.png](doc/inefficient-save-data.png)
+  
+  资源监控
+  
+  ![inefficient-save-resource.png](doc/inefficient-save-resource.png)
+  
+  现象 : 基于当前配置,系统能承受最大创建订单峰值并发量是79 (2025-8-30 09:45:15) 此时cpu占用到达89.5%,3min内平均qps为43.37
+
 * 查询订单详情压测
+
+  压测报告
+
+  ![inefficient-query-data.png](doc/inefficient-query-data.png)
+
+  资源监控
+  
+  ![inefficient-query-resource.png](doc/inefficient-query-resource.png)
+  
+  现象 : 基于当前配置,两个接口性能表现相当,在资源和qps上略有差异,查询cpu峰值要低于写入,qps则是写入略高于查询.
+  
+* 分析及结论
+
+  (1) qps : 写入 > 随机主键查询  
+  
+    写入主键自增(O(1)),写入开销低;查询由于存在b+查找(O(lgn)),复杂度高,开销高.
+  
+  (2) cpu占用 : 写入 > 随机主键查询
+
+   ① qps 本身写入高于查询,cpu自然占用多
+   ② 单次写入涉及cpu占用也要高于查询 ,因为写入需要维护索引,内存分配,事务管理等
+
+  (3) 优化
+   
+   ① 针对查询B+树查询效率低,以及随机主键对本地缓存击穿的情况,可以在查询前置一层多级布隆过滤,随交易规模增大,此种方案也是超大并发场景比较常见的解决方案
 
 ## 功能展示
 
@@ -364,6 +403,7 @@ CREATE TABLE TRANSACTION_ORDER (
   ![page.png](doc/page2.png)
 * 查询交易 - 详情
   ![info.png](doc/info.png)
+
 ## 现状及规划
 
 ### 现状
