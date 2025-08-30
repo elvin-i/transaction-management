@@ -13,6 +13,10 @@
 
 http://homework.buukle.top/index.html#/transaction/list
 
+技术概述 + 功能展示 视频 :
+
+[show.mp4](doc/show.mp4)
+
 ### 本地预览
 
 本地启动 : transaction-management/transaction-management-backend/transaction-management-backend-web/src/main/java/homework.bank.web.WebApplication
