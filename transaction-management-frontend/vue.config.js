@@ -39,6 +39,36 @@ const assetsCDN = {
 // vue.config.js
 const vueConfig = {
   publicPath: process.env.PUBLIC_PATH,
+  // Enable multi-page application to host different management systems
+  pages: {
+      entry: 'src/main.js',
+      template: 'public/index.html',
+      filename: 'index.html',
+      title: '支付运营控制台',
+      logo: 'logo.svg'
+    },
+    admin: {
+      entry: 'src/pages/admin/main.js',
+      template: 'public/index.html',
+      filename: 'admin.html',
+      title: '管理控制台',
+      logo: 'logo.svg'
+    },
+    ops: {
+      entry: 'src/pages/ops/main.js',
+      template: 'public/index.html',
+      filename: 'ops.html',
+      title: '运维控制台',
+      logo: 'logo.svg'
+    },
+    nav: {
+      entry: 'src/pages/nav/main.js',
+      template: 'public/index.html',
+      filename: 'nav.html',
+      title: '系统导航',
+      logo: 'logo.svg'
+    }
+  },
   configureWebpack: {
     // webpack plugins
     plugins: [

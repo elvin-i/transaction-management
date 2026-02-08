@@ -12,18 +12,27 @@
  *
  */
 
+const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
+const entry = pathname.indexOf('nav') > -1 ? 'nav' : (pathname.indexOf('admin') > -1 ? 'admin' : (pathname.indexOf('ops') > -1 ? 'ops' : 'index'))
+
+const titles = {
+  index: '支付运营控制台',
+  admin: '管理控制台',
+  ops: '运维控制台',
+  nav: '导航控制台'
+}
+
 export default {
-  navTheme: 'light', // theme for nav menu
+  // All entries use light (white) sidebar, including admin
+  navTheme: 'light', // theme for nav menu: 'dark' | 'light'
   primaryColor: '#13c2c2', // primary color of ant design
-  layout: 'sidemenu', // nav menu position: `sidemenu` or `topmenu`
-  contentWidth: 'Fluid', // layout of content: `Fluid` or `Fixed`, only works when layout is topmenu
+  layout: entry === 'nav' ? 'topmenu' : 'sidemenu', // nav: use topmenu
+  contentWidth: entry === 'nav' ? 'Fixed' : 'Fluid', // topmenu usually pairs with Fixed
   fixedHeader: true, // sticky header
   fixSiderbar: true, // sticky siderbar
   colorWeak: false,
-  menu: {
-    locale: true
-  },
-  title: 'homework',
+  menu: { locale: true },
+  title: titles[entry] || 'homework',
   pwa: false,
   iconfontUrl: '',
   production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true'

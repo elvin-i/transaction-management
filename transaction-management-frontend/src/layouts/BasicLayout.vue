@@ -14,7 +14,7 @@
     -->
     <template v-slot:menuHeaderRender>
       <div>
-        <logo-svg />
+        <component :is="logoComponent" />
         <h1>{{ title }}</h1>
       </div>
     </template>
@@ -56,6 +56,8 @@ import RightContent from '@/components/GlobalHeader/RightContent'
 import GlobalFooter from '@/components/GlobalFooter'
 import Ads from '@/components/Other/CarbonAds'
 import LogoSvg from '../assets/logo.svg?inline'
+import AdminLogoSvg from '../assets/logo-admin.svg?inline'
+import OpsLogoSvg from '../assets/logo-ops.svg?inline'
 
 export default {
   name: 'BasicLayout',
@@ -105,7 +107,16 @@ export default {
     ...mapState({
       // 动态主路由
       mainMenu: state => state.permission.addRouters
-    })
+    }),
+    entry () {
+      const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
+      return pathname.indexOf('nav') > -1 ? 'nav' : (pathname.indexOf('admin') > -1 ? 'admin' : (pathname.indexOf('ops') > -1 ? 'ops' : 'index'))
+    },
+    logoComponent () {
+      if (this.entry === 'admin') return AdminLogoSvg
+      if (this.entry === 'ops') return OpsLogoSvg
+      return LogoSvg
+    }
   },
   created () {
     const routes = this.mainMenu.find(item => item.path === '/')

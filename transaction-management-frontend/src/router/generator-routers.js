@@ -42,34 +42,99 @@ const rootRouter = {
  */
 export const generatorDynamicRouter = () => {
   return new Promise((resolve, reject) => {
-    const res = {
-      result:[
+    // Detect current entry page to generate different menus per system
+    const pathname = typeof window !== 'undefined' ? window.location.pathname : ''
+    const entry = pathname.indexOf('nav') > -1 ? 'nav' : (pathname.indexOf('admin') > -1 ? 'admin' : (pathname.indexOf('ops') > -1 ? 'ops' : 'index'))
+
+    let result = []
+    if (entry === 'admin') {
+      rootRouter.redirect = '/home'
+      result = [
         {
           id: 1,
           parentId: 0,
           component: 'PageView',
-          name: 'transaction',
-          meta: {
-            show: true,
-            title: '交易订单管理',
-            icon: 'interaction'
-          }
+          name: 'admin',
+          meta: { show: true, title: '管理控制台', icon: 'setting' }
         },
         {
           id: 2,
           parentId: 1,
+          component: 'admin/landing.vue',
+          name: '/home',
+          path: '/home',
+          meta: { show: true, title: '首页', icon: 'dashboard' }
+        }
+      ]
+    } else if (entry === 'ops') {
+      rootRouter.redirect = '/home'
+      result = [
+        {
+          id: 11,
+          parentId: 0,
+          component: 'PageView',
+          name: 'ops',
+          meta: { show: true, title: '运维控制台', icon: 'tool' }
+        },
+        {
+          id: 12,
+          parentId: 11,
+          component: 'ops/landing.vue',
+          name: '/home',
+          path: '/home',
+          meta: { show: true, title: '首页', icon: 'dashboard' }
+        }
+      ]
+    } else if (entry === 'nav') {
+      // Navigation hub: a single landing page with external links to other apps
+      rootRouter.redirect = '/home'
+      result = [
+        {
+          id: 31,
+          parentId: 0,
+          component: 'PageView',
+          name: 'nav',
+          meta: { show: true, title: '导航控制台', icon: 'appstore' }
+        },
+        {
+          id: 32,
+          parentId: 31,
+          component: 'nav/landing.vue',
+          name: '/home',
+          path: '/home',
+          meta: { show: true, title: '导航', icon: 'home' }
+        }
+      ]
+    } else {
+      // default index (支付运营控制台)
+      rootRouter.redirect = '/home'
+      result = [
+        {
+          id: 21,
+          parentId: 0,
+          component: 'PageView',
+          name: 'index',
+          meta: { show: true, title: '支付运营控制台', icon: 'bank' }
+        },
+        {
+          id: 22,
+          parentId: 21,
+          component: 'index/landing.vue',
+          name: '/home',
+          path:'/home',
+          meta: { show: true, title: '首页', icon: 'home' }
+        },
+        {
+          id: 23,
+          parentId: 21,
           component: 'transaction/list.vue',
           name: '/transaction/list',
           path:'/transaction/list',
-          meta: {
-            show: true,
-            title: '交易订单列表',
-            icon: 'interaction'
-          }
+          meta: { show: true, title: '交易订单列表', icon: 'profile' }
         }
       ]
     }
-    const { result } = res
+    // Use the computed `result` directly to produce menu/tree
     const menuNav = []
     const childrenNav = []
     //      后端数据, 根级树数组,  根级 PID
