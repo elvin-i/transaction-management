@@ -104,8 +104,8 @@ const vueConfig = {
     port: 8000,
     proxy: {
       '/api/': {
-        // target: 'http://127.0.0.1:8080',
-        target: 'http://homework.buukle.top',
+         target: 'http://127.0.0.1:8100',
+//        target: 'http://homework.buukle.top',
         ws: false,
         changeOrigin: true
       }
