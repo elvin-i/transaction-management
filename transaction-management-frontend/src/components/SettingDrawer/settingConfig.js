@@ -32,7 +32,12 @@ const colorList = [
 
 const updateTheme = newPrimaryColor => {
   const hideMessage = message.loading('正在切换主题！', 0)
-  themeColor.changeColor(newPrimaryColor).finally(() => {
+  // Safety fallback: ensure loading closes even if changeColor never resolves
+  const safety = setTimeout(() => {
+    try { hideMessage() } catch (e) {}
+  }, 3000)
+  return themeColor.changeColor(newPrimaryColor).finally(() => {
+    clearTimeout(safety)
     setTimeout(() => {
       hideMessage()
     }, 10)

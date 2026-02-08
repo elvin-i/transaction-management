@@ -46,7 +46,8 @@
 </template>
 
 <script>
-import { SettingDrawer, updateTheme } from '@ant-design-vue/pro-layout'
+import SettingDrawer from '@/components/SettingDrawer/SettingDrawer'
+import { updateTheme } from '@/components/SettingDrawer/settingConfig'
 import { i18nRender } from '@/locales'
 import { mapState } from 'vuex'
 import { CONTENT_WIDTH_TYPE, SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
@@ -129,11 +130,7 @@ export default {
       })
     }
 
-    // first update color
-    // TIPS: THEME COLOR HANDLER!! PLEASE CHECK THAT!!
-    if (process.env.NODE_ENV !== 'production' || process.env.VUE_APP_PREVIEW === 'true') {
-      updateTheme(this.settings.primaryColor)
-    }
+    // Removed initial theme update to avoid unnecessary loading message on mount
   },
   methods: {
     i18nRender,

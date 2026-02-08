@@ -190,7 +190,7 @@ export default {
 
   },
   mounted () {
-    updateTheme(this.primaryColor)
+    // Skip initial theme update to avoid loading toast on open
     if (this.colorWeak !== config.colorWeak) {
       updateColorWeak(this.colorWeak)
     }

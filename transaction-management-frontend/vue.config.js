@@ -119,10 +119,8 @@ const vueConfig = {
   transpileDependencies: []
 }
 
-// preview.pro.loacg.com only do not use in your production;
-if (process.env.VUE_APP_PREVIEW === 'true') {
-  console.log('VUE_APP_PREVIEW', process.env.VUE_APP_PREVIEW)
-  console.log(process.env.NODE_ENV)
+// Enable theme color replacer in preview and development to support runtime theme switch
+if (process.env.VUE_APP_PREVIEW === 'true' || process.env.NODE_ENV === 'development') {
   // add `ThemeColorReplacer` plugin to webpack plugins
   vueConfig.configureWebpack.plugins.push(createThemeColorReplacerPlugin())
 }
