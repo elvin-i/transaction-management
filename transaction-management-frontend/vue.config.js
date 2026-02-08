@@ -41,6 +41,7 @@ const vueConfig = {
   publicPath: process.env.PUBLIC_PATH,
   // Enable multi-page application to host different management systems
   pages: {
+    index: {
       entry: 'src/main.js',
       template: 'public/index.html',
       filename: 'index.html',
