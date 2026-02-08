@@ -46,8 +46,7 @@
 </template>
 
 <script>
-import SettingDrawer from '@/components/SettingDrawer/SettingDrawer'
-import { updateTheme } from '@/components/SettingDrawer/settingConfig'
+import { SettingDrawer } from '@ant-design-vue/pro-layout'
 import { i18nRender } from '@/locales'
 import { mapState } from 'vuex'
 import { CONTENT_WIDTH_TYPE, SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
